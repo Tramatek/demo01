@@ -8,6 +8,46 @@ https://templatemo.com/tm-594-nexus-flow
 
 // JavaScript Document
 
+// Bilingual navigation and footer
+        function initializeLanguageSwitcher() {
+            const translations = {
+                id: {
+                    home: 'Beranda', features: 'Fitur', pricing: 'Harga', stats: 'Statistik',
+                    contact: 'Hubungi Kami', quickLinks: 'Menu Utama', contactInfo: 'Informasi Kontak',
+                    footerDescription: 'Mitra teknologi terpercaya untuk menghadirkan solusi digital yang sesuai dengan kebutuhan Anda.',
+                    footerAddress: '18 Office Park, Jl. TB Simatupang No.18, Kebagusan, Pasar Minggu, Jakarta Selatan 12520',
+                    copyright: 'Copyright © 2026 Tramatek. Hak cipta dilindungi.'
+                },
+                en: {
+                    home: 'Home', features: 'Features', pricing: 'Pricing', stats: 'Statistics',
+                    contact: 'Contact Us', quickLinks: 'Quick Links', contactInfo: 'Contact Information',
+                    footerDescription: 'Your trusted technology partner for digital solutions tailored to your needs.',
+                    footerAddress: '18 Office Park, Jl. TB Simatupang No.18, Kebagusan, Pasar Minggu, South Jakarta 12520',
+                    copyright: 'Copyright © 2026 Tramatek. All rights reserved.'
+                }
+            };
+
+            function setLanguage(language) {
+                const lang = translations[language] ? language : 'id';
+                document.documentElement.lang = lang;
+                document.querySelectorAll('[data-i18n]').forEach((element) => {
+                    const text = translations[lang][element.dataset.i18n];
+                    if (text) element.textContent = text;
+                });
+                document.querySelectorAll('[data-lang]').forEach((button) => {
+                    const active = button.dataset.lang === lang;
+                    button.classList.toggle('active', active);
+                    button.setAttribute('aria-pressed', String(active));
+                });
+                localStorage.setItem('siteLanguage', lang);
+            }
+
+            document.querySelectorAll('[data-lang]').forEach((button) => {
+                button.addEventListener('click', () => setLanguage(button.dataset.lang));
+            });
+            setLanguage(localStorage.getItem('siteLanguage') === 'en' ? 'en' : 'id');
+        }
+
 // Initialize mobile menu functionality
         function initializeMobileMenu() {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -133,9 +173,13 @@ https://templatemo.com/tm-594-nexus-flow
 
         // Initialize mobile menu when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeMobileMenu);
+            document.addEventListener('DOMContentLoaded', () => {
+                initializeMobileMenu();
+                initializeLanguageSwitcher();
+            });
         } else {
             initializeMobileMenu();
+            initializeLanguageSwitcher();
         }
 
         // Generate Matrix Rain Effect
